@@ -1,13 +1,25 @@
 import React from "react";
 
-interface CellProps {
-  id: number;
+interface NodeProps {
+  isStart: boolean;
+  isEnd: boolean;
+  isObstacle: boolean;
+  onClick: () => void;
 }
 
-const Cell: React.FC<CellProps> = ({ id }) => {
+const Node: React.FC<NodeProps> = ({ isStart, isEnd, isObstacle, onClick }) => {
+  const baseClass = "w-6 h-6 border border-gray-300";
+  const extraClassName = isStart
+    ? "bg-green-500"
+    : isEnd
+    ? "bg-red-500"
+    : isObstacle
+    ? "bg-black"
+    : "";
+
   return (
-    <div className="w-6 h-6 border border-gray-300" id={`cell-${id}`}></div>
+    <div className={`${baseClass} ${extraClassName}`} onClick={onClick}></div>
   );
 };
 
-export default Cell;
+export default Node;
