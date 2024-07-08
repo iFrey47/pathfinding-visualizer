@@ -10,8 +10,9 @@ const Grid: React.FC = () => {
   const [endCell, setEndCell] = useState<{ row: number; col: number } | null>(
     null
   );
+  const [isObstacleMode, setIsObstacleMode] = useState(false);
 
-  const handleNodeClick = (row: number, col: number) => {
+  const handleCellClick = (row: number, col: number) => {
     const newGrid = [...grid];
     if (!startCell) {
       setStartCell({ row, col });
@@ -19,27 +20,52 @@ const Grid: React.FC = () => {
     } else if (!endCell) {
       setEndCell({ row, col });
       newGrid[row][col].isEnd = true;
-    } else {
+    } else if (isObstacleMode) {
       newGrid[row][col].isObstacle = !newGrid[row][col].isObstacle;
     }
     setGrid(newGrid);
   };
 
+  const clearGrid = () => {
+    setGrid(createInitialGrid());
+    setStartCell(null);
+    setEndCell(null);
+  };
+
   return (
-    <div className="grid grid-cols-50 gap-0.5">
-      {grid.map((row, rowIdx) => (
-        <div key={rowIdx} className="flex">
-          {row.map((cell, cellIdx) => (
-            <Cell
-              key={cellIdx}
-              isStart={cell.isStart}
-              isEnd={cell.isEnd}
-              isObstacle={cell.isObstacle}
-              onClick={() => handleNodeClick(rowIdx, cellIdx)}
-            />
-          ))}
-        </div>
-      ))}
+    <div>
+      <div className="flex space-x-4 mb-4">
+        <button
+          className={`px-4 py-2 rounded ${
+            isObstacleMode ? "bg-blue-500 text-white" : "bg-gray-300"
+          }`}
+          onClick={() => setIsObstacleMode(!isObstacleMode)}
+        >
+          {isObstacleMode ? "Disable Obstacle Mode" : "Enable Obstacle Mode"}
+        </button>
+        <button
+          className="px-4 py-2 bg-red-500 text-white rounded"
+          onClick={clearGrid}
+        >
+          Clear Grid
+        </button>
+      </div>
+
+      <div className="grid grid-cols-50 gap-0.5">
+        {grid.map((row, rowIdx) => (
+          <div key={rowIdx} className="flex">
+            {row.map((cell, cellIdx) => (
+              <Cell
+                key={cellIdx}
+                isStart={cell.isStart}
+                isEnd={cell.isEnd}
+                isObstacle={cell.isObstacle}
+                onClick={() => handleCellClick(rowIdx, cellIdx)}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
