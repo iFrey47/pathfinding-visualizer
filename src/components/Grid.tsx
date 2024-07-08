@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import Cell from "./Cells";
 
+import { visualizeAStar } from "../visualizations/AStarVisualization";
+import { visualizeBFS } from "../visualizations/BFSVisualization";
+import { visualizeDFS } from "../visualizations/DFSVisualization";
+import { visualizeDijkstra } from "../visualizations/DijkstraVisualization";
+
 interface CellType {
   row: number;
   col: number;
   isStart: boolean;
   isEnd: boolean;
   isObstacle: boolean;
+  isVisited: boolean;
+  distance: number;
+  previousCell: CellType | null;
 }
 
 const Grid: React.FC = () => {
@@ -20,20 +28,22 @@ const Grid: React.FC = () => {
   );
   const [isObstacleMode, setIsObstacleMode] = useState(false);
   const [isMousePressed, setIsMousePressed] = useState(false);
+  const [showAlgorithms, setShowAlgorithms] = useState(false);
+  const [selectAlgorithms, setSelectAlgorithms] = useState<string | null>(null);
 
-  const handleCellClick = (row: number, col: number) => {
-    const newGrid = [...grid];
-    if (!startCell) {
-      setStartCell({ row, col });
-      newGrid[row][col].isStart = true;
-    } else if (!endCell) {
-      setEndCell({ row, col });
-      newGrid[row][col].isEnd = true;
-    } else if (isObstacleMode) {
-      newGrid[row][col].isObstacle = !newGrid[row][col].isObstacle;
-    }
-    setGrid(newGrid);
-  };
+  //   const handleCellClick = (row: number, col: number) => {
+  //     const newGrid = [...grid];
+  //     if (!startCell) {
+  //       setStartCell({ row, col });
+  //       newGrid[row][col].isStart = true;
+  //     } else if (!endCell) {
+  //       setEndCell({ row, col });
+  //       newGrid[row][col].isEnd = true;
+  //     } else if (isObstacleMode) {
+  //       newGrid[row][col].isObstacle = !newGrid[row][col].isObstacle;
+  //     }
+  //     setGrid(newGrid);
+  //   };
 
   const handleMouseDown = (row: number, col: number) => {
     if (!startCell) {
@@ -80,8 +90,27 @@ const Grid: React.FC = () => {
     setStartCell(null);
     setEndCell(null);
     setIsObstacleMode(false);
+    setSelectAlgorithms(null);
   };
 
+  const handleAlgorithmSelect = (algorithm: string) => {
+    setSelectAlgorithms(algorithm);
+    setShowAlgorithms(false);
+  };
+
+  const startVisualization = () => {
+    if (startCell && endCell) {
+      if (selectAlgorithms === "DFS") {
+        visualizeDFS(grid, startCell, endCell);
+      } else if (selectAlgorithms === "BFS") {
+        visualizeBFS(grid, startCell, endCell);
+      } else if (selectAlgorithms === "A*") {
+        visualizeAStar(grid, startCell, endCell);
+      } else if (selectAlgorithms === "Dijkstra") {
+        visualizeDijkstra(grid, startCell, endCell);
+      }
+    }
+  };
   return (
     <div>
       <div className="flex space-x-4 mb-4">
@@ -100,6 +129,53 @@ const Grid: React.FC = () => {
         >
           Clear Grid
         </button>
+
+        <div className="relative">
+          <button
+            className="px-4 py-2 bg-green-500 text-white rounded"
+            onClick={() => setShowAlgorithms(!showAlgorithms)}
+          >
+            {selectAlgorithms
+              ? `Algorithm: ${selectAlgorithms}`
+              : "Add an Algorithm"}
+          </button>
+          {showAlgorithms && (
+            <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-10">
+              <div
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleAlgorithmSelect("DFS")}
+              >
+                DFS
+              </div>
+              <div
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleAlgorithmSelect("BFS")}
+              >
+                BFS
+              </div>
+              <div
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleAlgorithmSelect("A*")}
+              >
+                A*
+              </div>
+              <div
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleAlgorithmSelect("Dijkstra")}
+              >
+                Dijkstra
+              </div>
+            </div>
+          )}
+        </div>
+        {selectAlgorithms && (
+          <button
+            className="px-4 py-2 bg-yellow-500 text-white rounded"
+            onClick={startVisualization}
+          >
+            Visualize {selectAlgorithms}
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-50 gap-0.5">
@@ -142,6 +218,9 @@ const createCell = (row: number, col: number) => ({
   isStart: false,
   isEnd: false,
   isObstacle: false,
+  isVisited: false,
+  distance: Infinity,
+  previousCell: null,
 });
 
 export default Grid;
