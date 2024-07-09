@@ -6,13 +6,14 @@ import { visualizeBFS } from "../visualizations/BFSVisualization";
 import { visualizeDFS } from "../visualizations/DFSVisualization";
 import { visualizeDijkstra } from "../visualizations/DijkstraVisualization";
 
-interface CellType {
+export interface CellType {
   row: number;
   col: number;
   isStart: boolean;
   isEnd: boolean;
   isObstacle: boolean;
   isVisited: boolean;
+  isPath: boolean;
   distance: number;
   previousCell: CellType | null;
 }
@@ -98,10 +99,10 @@ const Grid: React.FC = () => {
     setShowAlgorithms(false);
   };
 
-  const startVisualization = () => {
+  const startVisualization = async () => {
     if (startCell && endCell) {
       if (selectAlgorithms === "DFS") {
-        visualizeDFS(grid, startCell, endCell);
+        await visualizeDFS(grid, startCell, endCell, setGrid);
       } else if (selectAlgorithms === "BFS") {
         visualizeBFS(grid, startCell, endCell);
       } else if (selectAlgorithms === "A*") {
@@ -187,6 +188,8 @@ const Grid: React.FC = () => {
                 isStart={cell.isStart}
                 isEnd={cell.isEnd}
                 isObstacle={cell.isObstacle}
+                isVisited={cell.isVisited}
+                isPath={cell.isPath}
                 onMouseDown={() => handleMouseDown(rowIdx, cellIdx)}
                 onMouseEnter={() => handleMouseEnter(rowIdx, cellIdx)}
                 onMouseUp={handleMouseUp}
@@ -200,7 +203,7 @@ const Grid: React.FC = () => {
   );
 };
 
-const createInitialGrid = () => {
+const createInitialGrid = (): CellType[][] => {
   const grid = [];
   for (let row = 0; row < 22; row++) {
     const currentRow = [];
@@ -212,13 +215,14 @@ const createInitialGrid = () => {
   return grid;
 };
 
-const createCell = (row: number, col: number) => ({
+const createCell = (row: number, col: number): CellType => ({
   row,
   col,
   isStart: false,
   isEnd: false,
   isObstacle: false,
   isVisited: false,
+  isPath: false,
   distance: Infinity,
   previousCell: null,
 });

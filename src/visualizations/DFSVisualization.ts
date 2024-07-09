@@ -1,4 +1,31 @@
-export const visualizeDFS = (grid: any, startNode: any, endNode: any) => {
-  console.log("Visualizing DFS");
-  // Add DFS* visualization logic here
+import { CellType } from "../components/Grid";
+import { dfs } from "../algorithms/DFS";
+
+// visualize DFS Algorithm
+export const visualizeDFS = async (
+  grid: CellType[][],
+  start: { row: number; col: number },
+  end: { row: number; col: number },
+  setGrid: React.Dispatch<React.SetStateAction<CellType[][]>>
+) => {
+  const path = dfs(grid, start, end);
+
+  for (const node of path) {
+    grid[node.row][node.col].isVisited = true;
+    setGrid([...grid]);
+    await new Promise((resolve) => setTimeout(resolve, 100)); //delay for visualization
+  }
+
+  // highlight the path to the end node
+  if (
+    path.length > 0 &&
+    path[path.length - 1].row === end.row &&
+    path[path.length - 1].col === end.col
+  ) {
+    for (const node of path) {
+      grid[node.row][node.col].isPath = true;
+      setGrid([...grid]);
+      await new Promise((resolve) => setTimeout(resolve, 50)); //delay for path highlighting
+    }
+  }
 };
