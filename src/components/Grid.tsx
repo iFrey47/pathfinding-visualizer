@@ -108,7 +108,7 @@ const Grid: React.FC = () => {
       } else if (selectAlgorithms === "A*") {
         visualizeAStar(grid, startCell, endCell);
       } else if (selectAlgorithms === "Dijkstra") {
-        visualizeDijkstra(grid, startCell, endCell);
+        await visualizeDijkstra(grid, startCell, endCell, setGrid);
       }
     }
   };

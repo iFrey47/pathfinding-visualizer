@@ -9,7 +9,6 @@ interface CellProps {
   onMouseDown: () => void;
   onMouseEnter: () => void;
   onMouseUp: () => void;
-  //   onClick: () => void;
 }
 
 const Cell: React.FC<CellProps> = ({
@@ -23,13 +22,6 @@ const Cell: React.FC<CellProps> = ({
   onMouseUp,
 }) => {
   const baseClass = "w-6 h-6 border border-gray-300";
-  //   const extraClassName = isStart
-  //     ? "bg-green-500"
-  //     : isEnd
-  //     ? "bg-red-500"
-  //     : isObstacle
-  //     ? "bg-black"
-  //     : "";
 
   let extraClassName = "";
 
