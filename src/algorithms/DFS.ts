@@ -1,9 +1,5 @@
 import { CellType } from "../components/Grid";
 
-// const OBSTACLE = -1;
-// const EMPTY = 0;
-
-// validate if the move is within the grid and the cell is not an obstacle and not visited
 const isValidMove = (
   x: number,
   y: number,
@@ -16,7 +12,6 @@ const isValidMove = (
   return false;
 };
 
-// DFS Algorithm
 export const dfs = (
   grid: CellType[][],
   start: { row: number; col: number },
@@ -51,7 +46,6 @@ export const dfs = (
       return path;
     }
 
-    // explore the 4 possible movements
     for (const movement of possibleMovements) {
       const newRow = row + movement.x;
       const newCol = col + movement.y;
