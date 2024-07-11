@@ -104,7 +104,7 @@ const Grid: React.FC = () => {
       if (selectAlgorithms === "DFS") {
         await visualizeDFS(grid, startCell, endCell, setGrid);
       } else if (selectAlgorithms === "BFS") {
-        visualizeBFS(grid, startCell, endCell);
+        await visualizeBFS(grid, startCell, endCell, setGrid);
       } else if (selectAlgorithms === "A*") {
         visualizeAStar(grid, startCell, endCell);
       } else if (selectAlgorithms === "Dijkstra") {
