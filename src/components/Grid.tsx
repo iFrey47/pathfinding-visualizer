@@ -7,9 +7,8 @@ import { visualizeDFS } from "../visualizations/DFSVisualization";
 import { visualizeDijkstra } from "../visualizations/DijkstraVisualization";
 
 import { dfsMazeGeneration } from "../mazeGeneration/dfsBasedMazeGeneration";
-import { generateRecursiveDivisionMaze } from "../mazeGeneration/reccursiveDivision";
-import { generateRoomMaze } from "../mazeGeneration/roomMaze";
-import { justCecking } from "../mazeGeneration/justChecking";
+import { generatePrimMaze } from "../mazeGeneration/primMazeGeneration";
+import { generateRecursiveDivisionMaze } from "../mazeGeneration/recursiveDivisionMaze";
 
 export interface CellType {
   row: number;
@@ -101,18 +100,13 @@ const Grid: React.FC = () => {
       case "dfsMazeGeneration":
         newGrid = dfsMazeGeneration(grid);
         break;
-      case "RecursiveDivision":
+
+      case "generatePrimMaze":
+        newGrid = generatePrimMaze(grid);
+        break;
+      case "generateRecursiveDivisionMaze":
         newGrid = generateRecursiveDivisionMaze(grid);
         break;
-      case "RoomMaze":
-        newGrid = generateRoomMaze(grid);
-        break;
-      // case "JustChecking":
-      //   newGrid = justCecking(grid);
-      //   break;
-      // case "RecursiveVerticalSkew":
-      //   newGrid = generateRecursiveVerticalSkewMaze(grid);
-      //   break;
       // case "RecursiveHorizontalSkew":
       //   newGrid = generateRecursiveHorizontalSkewMaze(grid);
       //   break;
@@ -212,33 +206,35 @@ const Grid: React.FC = () => {
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleMazeGenerate("RecursiveDivision")}
+                onClick={() => handleMazeGenerate("generatePrimMaze")}
               >
-                Recursive Division
+                Prim Maze
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleMazeGenerate("RecursiveVerticalSkew")}
+                onClick={() =>
+                  handleMazeGenerate("generateRecursiveDivisionMaze")
+                }
               >
-                Recursive Vertical Skew
+                Rerursive Division Maze
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => handleMazeGenerate("RecursiveHorizontalSkew")}
               >
-                Recursive Horizontal Skew
+                Add a new one
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => handleMazeGenerate("RoomMaze")}
               >
-                Room Maze
+                Add a new one
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => handleMazeGenerate("JustChecking")}
               >
-                Just Checking
+                Add a new one
               </div>
             </div>
           )}
