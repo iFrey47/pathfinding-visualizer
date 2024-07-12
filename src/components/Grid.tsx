@@ -6,7 +6,7 @@ import { visualizeBFS } from "../visualizations/BFSVisualization";
 import { visualizeDFS } from "../visualizations/DFSVisualization";
 import { visualizeDijkstra } from "../visualizations/DijkstraVisualization";
 
-import { generateBasicMaze } from "../mazeGeneration/basicMaze";
+import { dfsMazeGeneration } from "../mazeGeneration/dfsBasedMazeGeneration";
 import { generateRecursiveDivisionMaze } from "../mazeGeneration/reccursiveDivision";
 import { generateRoomMaze } from "../mazeGeneration/roomMaze";
 import { justCecking } from "../mazeGeneration/justChecking";
@@ -98,8 +98,8 @@ const Grid: React.FC = () => {
     setMazeType(mazeType);
     let newGrid;
     switch (mazeType) {
-      case "Basic":
-        newGrid = generateBasicMaze(grid);
+      case "dfsMazeGeneration":
+        newGrid = dfsMazeGeneration(grid);
         break;
       case "RecursiveDivision":
         newGrid = generateRecursiveDivisionMaze(grid);
@@ -107,9 +107,9 @@ const Grid: React.FC = () => {
       case "RoomMaze":
         newGrid = generateRoomMaze(grid);
         break;
-      case "JustChecking":
-        newGrid = generateBasicMaze(grid);
-        break;
+      // case "JustChecking":
+      //   newGrid = justCecking(grid);
+      //   break;
       // case "RecursiveVerticalSkew":
       //   newGrid = generateRecursiveVerticalSkewMaze(grid);
       //   break;
@@ -206,9 +206,9 @@ const Grid: React.FC = () => {
             <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-10">
               <div
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleMazeGenerate("Basic")}
+                onClick={() => handleMazeGenerate("dfsMazeGeneration")}
               >
-                Basic Maze
+                DFS Based Maze Generation
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
