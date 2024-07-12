@@ -8,6 +8,7 @@ import { visualizeDijkstra } from "../visualizations/DijkstraVisualization";
 
 import { generateBasicMaze } from "../mazeGeneration/basicMaze";
 import { generateRecursiveDivisionMaze } from "../mazeGeneration/reccursiveDivision";
+import { generateRoomMaze } from "../mazeGeneration/roomMaze";
 
 export interface CellType {
   row: number;
@@ -101,6 +102,9 @@ const Grid: React.FC = () => {
         break;
       case "RecursiveDivision":
         newGrid = generateRecursiveDivisionMaze(grid);
+        break;
+      case "RoomMaze":
+        newGrid = generateRoomMaze(grid);
         break;
       // case "RecursiveVerticalSkew":
       //   newGrid = generateRecursiveVerticalSkewMaze(grid);
@@ -219,6 +223,12 @@ const Grid: React.FC = () => {
                 onClick={() => handleMazeGenerate("RecursiveHorizontalSkew")}
               >
                 Recursive Horizontal Skew
+              </div>
+              <div
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleMazeGenerate("RoomMaze")}
+              >
+                Room Maze
               </div>
             </div>
           )}
