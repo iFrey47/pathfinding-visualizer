@@ -13,7 +13,7 @@ export const visualizeDijkstra = async (
   for (const node of path) {
     grid[node.row][node.col].isVisited = true;
     setGrid([...grid]);
-    await new Promise((resolve) => setTimeout(resolve, 50)); // delay for visualization
+    await new Promise((resolve) => setTimeout(resolve, 25)); // delay for visualization
   }
 
   // highlight the path to the end node
@@ -25,7 +25,7 @@ export const visualizeDijkstra = async (
     for (const node of path) {
       grid[node.row][node.col].isPath = true;
       setGrid([...grid]);
-      await new Promise((resolve) => setTimeout(resolve, 30)); // delay for path highlighting
+      await new Promise((resolve) => setTimeout(resolve, 20)); // delay for path highlighting
     }
   }
 };
