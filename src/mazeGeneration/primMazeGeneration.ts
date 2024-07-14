@@ -1,3 +1,4 @@
+
 import { CellType } from "../components/Grid";
 
 export const generatePrimMaze = (grid: CellType[][]): CellType[][] => {
@@ -8,38 +9,48 @@ export const generatePrimMaze = (grid: CellType[][]): CellType[][] => {
   const width = newGrid[0].length;
   const height = newGrid.length;
 
-  const isWithinBounds = (x: number, y: number): boolean => {
-    return x > 0 && x < width - 1 && y > 0 && y < height - 1;
+  const directions: [number, number][] = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+  ];
+
+  const isInBounds = (x: number, y: number) =>
+    x > 0 && x < width - 1 && y > 0 && y < height - 1;
+
+  const shuffleArray = (array: any[]): void => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
   };
 
-  const getNeighbors = (x: number, y: number): [number, number][] => {
-    const neighbors: [number, number][] = [];
-    if (isWithinBounds(x + 2, y)) neighbors.push([x + 2, y]);
-    if (isWithinBounds(x - 2, y)) neighbors.push([x - 2, y]);
-    if (isWithinBounds(x, y + 2)) neighbors.push([x, y + 2]);
-    if (isWithinBounds(x, y - 2)) neighbors.push([x, y - 2]);
+  const getNeighbors = (x: number, y: number): [number, number, number, number][] => {
+    const neighbors: [number, number, number, number][] = [];
+    for (const [dx, dy] of directions) {
+      const nx = x + 2 * dx;
+      const ny = y + 2 * dy;
+      if (isInBounds(nx, ny) && newGrid[ny][nx].isObstacle) {
+        neighbors.push([x + dx, y + dy, nx, ny]);
+      }
+    }
+    shuffleArray(neighbors);
     return neighbors;
   };
 
-  const walls: [number, number][] = [];
-  newGrid[1][1].isObstacle = false;
-  walls.push(...getNeighbors(1, 1));
+  const startX = 1;
+  const startY = 1;
+  newGrid[startY][startX].isObstacle = false;
+
+  const walls: [number, number, number, number][] = getNeighbors(startX, startY);
 
   while (walls.length > 0) {
-    const randomIndex = Math.floor(Math.random() * walls.length);
-    const [x, y] = walls.splice(randomIndex, 1)[0];
-
-    if (newGrid[y][x].isObstacle) {
-      const neighbors = getNeighbors(x, y).filter(
-        ([nx, ny]) => !newGrid[ny][nx].isObstacle
-      );
-
-      if (neighbors.length === 1) {
-        const [nx, ny] = neighbors[0];
-        newGrid[(y + ny) / 2][(x + nx) / 2].isObstacle = false;
-        newGrid[y][x].isObstacle = false;
-        walls.push(...getNeighbors(x, y));
-      }
+    const [wallX, wallY, cellX, cellY] = walls.pop()!;
+    if (newGrid[cellY][cellX].isObstacle) {
+      newGrid[wallY][wallX].isObstacle = false;
+      newGrid[cellY][cellX].isObstacle = false;
+      walls.push(...getNeighbors(cellX, cellY));
     }
   }
 

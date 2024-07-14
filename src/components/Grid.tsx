@@ -9,6 +9,7 @@ import { visualizeDijkstra } from "../visualizations/DijkstraVisualization";
 import { dfsMazeGeneration } from "../mazeGeneration/dfsBasedMazeGeneration";
 import { generatePrimMaze } from "../mazeGeneration/primMazeGeneration";
 import { generateRecursiveDivisionMaze } from "../mazeGeneration/recursiveDivisionMaze";
+import {verticalSkewMazeGeneration} from "../mazeGeneration/verticalSkewPattern" 
 
 export interface CellType {
   row: number;
@@ -110,6 +111,9 @@ const Grid: React.FC = () => {
       // case "RecursiveHorizontalSkew":
       //   newGrid = generateRecursiveHorizontalSkewMaze(grid);
       //   break;
+      case "verticalSkewMazeGeneration":
+      newGrid = verticalSkewMazeGeneration(grid);
+      break;
       default:
         newGrid = grid;
     }
@@ -129,7 +133,8 @@ const Grid: React.FC = () => {
         await visualizeDijkstra(grid, startCell, endCell, setGrid);
       }
     }
-  };
+  }; 
+
 
   return (
     <div>
@@ -220,9 +225,9 @@ const Grid: React.FC = () => {
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleMazeGenerate("RecursiveHorizontalSkew")}
+                onClick={() => handleMazeGenerate("verticalSkewMazeGeneration")}
               >
-                Add a new one
+                Vertical Skew
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
